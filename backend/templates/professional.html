@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Professional Portfolio</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { overflow: visible !important; height: auto !important; max-height: none !important; }
+    body { font-family: "Inter", "Segoe UI", "Helvetica Neue", Arial, sans-serif; font-size: 10pt; line-height: 1.55; color: #1e293b; background: #ffffff; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .page { width: 210mm; min-height: auto; margin: 0 auto; padding: 14mm 16mm 18mm; background: #ffffff; overflow: visible; }
+    .header { margin-bottom: 16px; padding-bottom: 12px; border-bottom: 2px solid #2563eb; page-break-inside: avoid; }
+    .header h1 { font-size: 22pt; font-weight: 800; color: #0f172a; letter-spacing: -0.5px; line-height: 1.1; }
+    .header .role-title { font-size: 10.5pt; font-weight: 600; color: #2563eb; margin-top: 4px; }
+    .contact-row { display: flex; flex-wrap: wrap; gap: 6px 14px; margin-top: 8px; font-size: 8.5pt; color: #64748b; }
+    .section { margin-bottom: 14px; page-break-inside: avoid; break-inside: avoid; }
+    .section-title { font-size: 8pt; font-weight: 800; text-transform: uppercase; letter-spacing: 1.6px; color: #2563eb; border-bottom: 1.5px solid #dbeafe; padding-bottom: 4px; margin-bottom: 8px; }
+    .body-text { font-size: 9.5pt; color: #334155; line-height: 1.65; white-space: pre-wrap; word-wrap: break-word; overflow-wrap: anywhere; }
+    .empty-note { font-size: 8.5pt; color: #94a3b8; font-style: italic; }
+    .pub-card { border-left: 3px solid #2563eb; padding: 10px 12px; margin-bottom: 10px; background: #f8fafc; page-break-inside: avoid; }
+    .pub-header { display: flex; justify-content: space-between; gap: 12px; align-items: flex-start; margin-bottom: 4px; }
+    .pub-title { font-size: 9.5pt; font-weight: 700; color: #0f172a; line-height: 1.35; flex: 1; }
+    .pub-year { font-size: 8pt; font-weight: 600; color: #64748b; white-space: nowrap; }
+    .pub-meta { font-size: 8pt; color: #64748b; font-style: italic; margin-bottom: 4px; }
+    .pub-desc { font-size: 8.5pt; color: #475569; line-height: 1.55; }
+    .timeline-item { display: flex; gap: 10px; margin-bottom: 10px; page-break-inside: avoid; }
+    .timeline-marker { width: 3px; background: #93c5fd; border-radius: 2px; flex-shrink: 0; }
+    .timeline-body { flex: 1; min-width: 0; }
+    .timeline-header { display: flex; justify-content: space-between; gap: 8px; align-items: baseline; }
+    .timeline-title { font-size: 9.5pt; font-weight: 700; color: #0f172a; }
+    .timeline-year { font-size: 8pt; color: #64748b; white-space: nowrap; }
+    .timeline-badge { display: inline-block; font-size: 7pt; font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px; color: #1d4ed8; background: #eff6ff; padding: 1px 6px; border-radius: 3px; margin-top: 3px; }
+    .timeline-desc { font-size: 8.5pt; color: #475569; margin-top: 4px; line-height: 1.5; }
+    .skills-grid { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 6px; }
+    .skill-tag { display: inline-block; background: #eff6ff; border: 1px solid #bfdbfe; color: #1e40af; padding: 2px 8px; border-radius: 12px; font-size: 7.5pt; font-weight: 600; }
+    .metric-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+    .metric-card { border: 1px solid #dbeafe; border-radius: 6px; padding: 8px 10px; text-align: center; background: #f8fafc; page-break-inside: avoid; }
+    .metric-label { display: block; font-size: 7pt; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #64748b; }
+    .metric-value { display: block; font-size: 14pt; font-weight: 800; color: #1d4ed8; margin-top: 2px; }
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    @page { size: A4; margin: 12mm; }
+    @media print { body { overflow: visible !important; } .page { width: auto; padding: 0; } }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <header class="header">
+    <h1>{{name}}</h1>
+    <!-- HEADLINE_SECTION_START --><p class="role-title">{{headline}}</p><!-- HEADLINE_SECTION_END -->
+    <!-- CONTACT_SECTION_START --><div class="contact-row"><span>{{email}}</span><span>{{department}}</span><!-- CGPA_SECTION_START --><span>CGPA {{cgpa}}</span><!-- CGPA_SECTION_END --></div><!-- CONTACT_SECTION_END -->
+  </header>
+
+  <!-- BIO_SECTION_START -->
+  <section class="section">
+    <h2 class="section-title">Professional Summary</h2>
+    <p class="body-text">{{bio}}</p>
+  </section>
+  <!-- BIO_SECTION_END -->
+
+  <section class="section">
+    <h2 class="section-title">Skills</h2>
+    <!-- SKILLS_SECTION_START --><p class="body-text">{{skillsSummary}}</p><!-- SKILLS_SECTION_END -->
+    <div class="skills-grid">{{skillsList}}</div>
+  </section>
+
+  <section class="section">
+    <h2 class="section-title">Projects</h2>
+    {{projects}}
+  </section>
+
+  <section class="section">
+    <h2 class="section-title">Achievements</h2>
+    {{achievements}}
+  </section>
+
+  <section class="section">
+    <h2 class="section-title">Research &amp; Publications</h2>
+    {{publications}}
+  </section>
+
+  <div class="two-col">
+    <section class="section">
+      <h2 class="section-title">Certifications</h2>
+      {{certifications}}
+    </section>
+    <section class="section">
+      <h2 class="section-title">Leadership</h2>
+      {{leadership}}
+    </section>
+  </div>
+
+  <!-- SCORES_SECTION_START -->
+  <section class="section">
+    <h2 class="section-title">Portfolio Metrics</h2>
+    {{scoreMetrics}}
+  </section>
+  <!-- SCORES_SECTION_END -->
+
+</div>
+</body>
+</html>

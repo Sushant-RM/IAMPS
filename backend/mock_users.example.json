@@ -1,0 +1,16 @@
+{
+  "system_admin": {
+    "email": "admin@college.edu",
+    "password": "<generated-by-seed>",
+    "role": "admin",
+    "note": "Run npm run seed in backend/ to generate mock_users.json with demo credentials"
+  },
+  "students": [
+    {
+      "usn": "1MS22CSE001",
+      "email": "1ms22cse001@college.edu",
+      "password": "<generated-by-seed>",
+      "role": "student"
+    }
+  ]
+}

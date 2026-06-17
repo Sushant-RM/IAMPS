@@ -1,0 +1,49 @@
+# Dependencies
+node_modules/
+**/node_modules/
+
+# Environment & secrets
+.env
+.env.local
+.env.*.local
+backend/.env
+frontend/.env.local
+!.env.example
+!backend/.env.example
+
+# Build outputs
+dist/
+build/
+.next/
+out/
+coverage/
+
+# Generated artifacts
+Generated_Portfolios/
+uploads/
+logs/
+cache/
+tmp/
+*.pdf
+*.docx
+*.log
+
+# Seed-generated credentials (run: cd backend && npm run seed)
+backend/mock_users.json
+
+# Nested clone / submodule artifacts
+IAMPS/
+
+# Editor & tooling
+.aider*
+.continue/
+.cursor/
+.DS_Store
+Thumbs.db
+
+# Playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+/playwright/.auth/

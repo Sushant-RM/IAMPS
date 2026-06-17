@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Creative Portfolio</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: "Courier New", Courier, monospace;
+      font-size: 10.5pt;
+      line-height: 1.6;
+      color: #334155;
+      background: #fafafa;
+      padding: 0;
+    }
+
+    .page {
+      width: 210mm;
+      min-height: 297mm;
+      margin: 0 auto;
+      background: #fafafa;
+      display: flex;
+    }
+
+    /* ── LEFT SIDEBAR ── */
+    .sidebar {
+      width: 35%;
+      background: #0f172a;
+      color: #f8fafc;
+      padding: 16mm 10mm;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .sidebar h1 {
+      font-size: 28pt;
+      font-weight: 900;
+      line-height: 1.1;
+      text-transform: uppercase;
+      letter-spacing: -1px;
+      margin-bottom: 15px;
+    }
+
+    .sidebar h1 span {
+      color: #34d399; /* Emerald 400 */
+    }
+
+    .accent-bar {
+      width: 40px;
+      height: 4px;
+      background: #34d399;
+      margin-bottom: 25px;
+    }
+
+    .side-section {
+      margin-bottom: 25px;
+    }
+
+    .side-title {
+      font-size: 9pt;
+      font-weight: 800;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 8px;
+      border-bottom: 1px solid #1e293b;
+      padding-bottom: 3px;
+    }
+
+    .contact-list {
+      list-style: none;
+      font-size: 9pt;
+      color: #cbd5e1;
+    }
+
+    .contact-list li {
+      margin-bottom: 5px;
+      word-break: break-word;
+    }
+
+    .skills-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .skill-tag {
+      background: #1e293b;
+      color: #e2e8f0;
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-size: 8pt;
+      font-weight: 700;
+      border: 1px solid #334155;
+    }
+
+    /* ── RIGHT MAIN CONTENT ── */
+    .main-content {
+      width: 65%;
+      padding: 16mm 14mm;
+      background: #ffffff;
+    }
+
+    /* HEADLINE_SECTION_START */
+    .headline {
+      font-family: "Helvetica Neue", "Helvetica", "Arial", sans-serif;
+      font-size: 16pt;
+      font-weight: 800;
+      color: #0f172a;
+      margin-bottom: 25px;
+      line-height: 1.3;
+    }
+    /* HEADLINE_SECTION_END */
+
+    .main-section {
+      margin-bottom: 25px;
+    }
+
+    .main-title {
+      font-size: 11pt;
+      font-weight: 900;
+      color: #059669; /* Emerald 600 */
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      margin-bottom: 10px;
+    }
+
+    /* BIO_SECTION_START */
+    .bio-text {
+      font-family: "Helvetica Neue", "Helvetica", "Arial", sans-serif;
+      font-size: 10pt;
+      color: #475569;
+      text-align: justify;
+    }
+    /* BIO_SECTION_END */
+
+    /* OBJECTIVE_SECTION_START */
+    .objective-text {
+      font-family: "Helvetica Neue", "Helvetica", "Arial", sans-serif;
+      font-size: 10pt;
+      color: #475569;
+      text-align: justify;
+    }
+    /* OBJECTIVE_SECTION_END */
+
+    /* SKILLS_SECTION_START */
+    .skills-text {
+      font-family: "Helvetica Neue", "Helvetica", "Arial", sans-serif;
+      font-size: 10pt;
+      color: #475569;
+      text-align: justify;
+    }
+    /* SKILLS_SECTION_END */
+
+    /* ── ENTRY ITEMS (Timeline style) ── */
+    .entry {
+      position: relative;
+      padding-left: 15px;
+      border-left: 2px solid #a7f3d0; /* Emerald 200 */
+      margin-bottom: 15px;
+      font-family: "Helvetica Neue", "Helvetica", "Arial", sans-serif;
+    }
+
+    .entry::before {
+      content: "";
+      position: absolute;
+      left: -5px;
+      top: 4px;
+      width: 8px;
+      height: 8px;
+      background: #34d399; /* Emerald 400 */
+      border-radius: 50%;
+    }
+
+    .entry-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 4px;
+    }
+
+    .entry-title {
+      font-size: 10.5pt;
+      font-weight: 800;
+      color: #0f172a;
+      line-height: 1.2;
+    }
+
+    .entry-year {
+      font-size: 8pt;
+      font-weight: 700;
+      color: #64748b;
+      background: #f1f5f9;
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+
+    .entry-desc {
+      font-size: 9pt;
+      color: #64748b;
+      line-height: 1.5;
+    }
+    
+    .entry-badge {
+      display: none; /* Hide default badges for this theme */
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+  
+  <!-- LEFT SIDEBAR -->
+  <div class="sidebar">
+    <h1>
+      <script>
+        const nameParts = "{{name}}".split(" ");
+        document.write(nameParts[0] + "<br/><span>" + nameParts.slice(1).join(" ") + "</span>");
+      </script>
+    </h1>
+    <div class="accent-bar"></div>
+
+    <div class="side-section">
+      <div class="side-title">Contact</div>
+      <ul class="contact-list">
+        <li>{{email}}</li>
+        <li>Department of {{department}}</li>
+        <li>USN: {{usn}}</li>
+      </ul>
+    </div>
+
+    <div class="side-section">
+      <div class="side-title">Skills</div>
+      <div class="skills-grid">
+        {{skillsList}}
+      </div>
+    </div>
+
+    <div class="side-section">
+      <div class="side-title">Stats</div>
+      <ul class="contact-list">
+        <li><strong>CGPA:</strong> {{cgpa}}</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- RIGHT MAIN CONTENT -->
+  <div class="main-content">
+    
+    <!-- HEADLINE_SECTION_START -->
+    <div class="headline">{{headline}}</div>
+    <!-- HEADLINE_SECTION_END -->
+
+    <!-- BIO_SECTION_START -->
+    <div class="main-section">
+      <div class="main-title">About Me</div>
+      <div class="bio-text">{{bio}}</div>
+    </div>
+    <!-- BIO_SECTION_END -->
+
+    <!-- SKILLS_SECTION_START -->
+    <div class="main-section">
+      <div class="main-title">Technical Expertise</div>
+      <div class="skills-text">{{skillsSummary}}</div>
+    </div>
+    <!-- SKILLS_SECTION_END -->
+
+    <div class="main-section">
+      <div class="main-title">Milestones</div>
+      {{events}}
+    </div>
+
+    <div class="main-section">
+      <div class="main-title">Publications</div>
+      {{publications}}
+    </div>
+
+  </div>
+
+</div>
+</body>
+</html>

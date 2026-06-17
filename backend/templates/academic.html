@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Academic Portfolio</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { overflow: visible !important; height: auto !important; max-height: none !important; }
+    body { font-family: "Georgia", "Times New Roman", Times, serif; font-size: 10.5pt; line-height: 1.6; color: #1a202c; background: #ffffff; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .page { width: 210mm; min-height: auto; margin: 0 auto; padding: 16mm 18mm 20mm; background: #ffffff; overflow: visible; }
+    .header { text-align: center; padding-bottom: 14px; margin-bottom: 18px; border-bottom: 1px solid #334155; page-break-inside: avoid; }
+    .header::after { content: ""; display: block; height: 2px; background: #334155; margin-top: 4px; }
+    .header h1 { font-size: 20pt; font-weight: normal; color: #0f172a; text-transform: uppercase; letter-spacing: 3px; line-height: 1.2; }
+    .header .subtitle { font-size: 9.5pt; font-style: italic; color: #475569; margin-top: 6px; }
+    .header .headline { font-size: 10pt; font-style: italic; color: #1e3a8a; margin-top: 6px; font-weight: 600; }
+    .meta-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px 16px; margin-top: 10px; font-size: 8.5pt; color: #475569; }
+    .section { margin-bottom: 16px; page-break-inside: avoid; break-inside: avoid; }
+    .section-title { font-size: 9pt; font-weight: bold; text-transform: uppercase; letter-spacing: 2px; color: #0f172a; border-bottom: 1px solid #94a3b8; padding-bottom: 4px; margin-bottom: 10px; }
+    .body-text { font-size: 9.5pt; color: #334155; line-height: 1.65; text-align: justify; white-space: pre-wrap; word-wrap: break-word; overflow-wrap: anywhere; }
+    .empty-note { font-size: 8.5pt; color: #94a3b8; font-style: italic; }
+    .pub-card { border-left: 2px solid #334155; padding: 10px 12px; margin-bottom: 10px; background: #ffffff; page-break-inside: avoid; }
+    .pub-header { display: flex; justify-content: space-between; gap: 12px; align-items: flex-start; margin-bottom: 4px; }
+    .pub-title { font-size: 9.5pt; font-weight: bold; color: #0f172a; line-height: 1.4; flex: 1; }
+    .pub-year { font-size: 8.5pt; color: #64748b; font-style: italic; white-space: nowrap; }
+    .pub-meta { font-size: 8pt; color: #64748b; font-style: italic; margin-bottom: 4px; }
+    .pub-desc { font-size: 8.5pt; color: #475569; line-height: 1.55; text-align: justify; }
+    .timeline-item { display: flex; gap: 10px; margin-bottom: 10px; page-break-inside: avoid; }
+    .timeline-marker { width: 2px; background: #94a3b8; flex-shrink: 0; }
+    .timeline-body { flex: 1; min-width: 0; }
+    .timeline-header { display: flex; justify-content: space-between; gap: 8px; align-items: baseline; }
+    .timeline-title { font-size: 9.5pt; font-weight: bold; color: #0f172a; }
+    .timeline-year { font-size: 8.5pt; color: #64748b; font-style: italic; white-space: nowrap; }
+    .timeline-badge { display: inline-block; font-size: 7.5pt; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #1e3a8a; border: 1px solid #bfdbfe; padding: 1px 7px; border-radius: 3px; margin-top: 3px; }
+    .timeline-desc { font-size: 8.5pt; color: #475569; margin-top: 4px; line-height: 1.55; text-align: justify; }
+    .skills-grid { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 6px; }
+    .skill-tag { background: #f8fafc; border: 1px solid #cbd5e1; color: #334155; padding: 2px 7px; border-radius: 3px; font-size: 7.5pt; font-weight: 600; }
+    @page { size: A4; margin: 14mm; }
+    @media print { body { overflow: visible !important; } .page { width: auto; padding: 0; } }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <header class="header">
+    <h1>{{name}}</h1>
+    <p class="subtitle">{{department}} · {{university}}</p>
+    <!-- HEADLINE_SECTION_START --><p class="headline">{{headline}}</p><!-- HEADLINE_SECTION_END -->
+    <div class="meta-grid">
+      <!-- CGPA_SECTION_START --><span>CGPA: {{cgpa}}</span><!-- CGPA_SECTION_END -->
+      <!-- CONTACT_SECTION_START --><span>{{email}}</span><span>{{usn}}</span><!-- CONTACT_SECTION_END -->
+    </div>
+  </header>
+
+  <!-- BIO_SECTION_START -->
+  <section class="section">
+    <h2 class="section-title">Academic Summary</h2>
+    <p class="body-text">{{bio}}</p>
+  </section>
+  <!-- BIO_SECTION_END -->
+
+  <section class="section">
+    <h2 class="section-title">Research Publications</h2>
+    {{publications}}
+  </section>
+
+  <!-- RESEARCH_INTERESTS_SECTION_START -->
+  <section class="section">
+    <h2 class="section-title">Research Interests</h2>
+    <p class="body-text">{{researchInterests}}</p>
+  </section>
+  <!-- RESEARCH_INTERESTS_SECTION_END -->
+
+  <section class="section">
+    <h2 class="section-title">Academic Achievements</h2>
+    {{achievements}}
+  </section>
+
+  <section class="section">
+    <h2 class="section-title">Certifications</h2>
+    {{certifications}}
+  </section>
+
+  <section class="section">
+    <h2 class="section-title">Technical Skills</h2>
+    <!-- SKILLS_SECTION_START --><p class="body-text">{{skillsSummary}}</p><!-- SKILLS_SECTION_END -->
+    <div class="skills-grid">{{skillsList}}</div>
+  </section>
+
+  <section class="section">
+    <h2 class="section-title">Projects</h2>
+    {{projects}}
+  </section>
+
+  <section class="section">
+    <h2 class="section-title">Awards</h2>
+    {{awards}}
+  </section>
+
+  <!-- OBJECTIVE_SECTION_START -->
+  <section class="section">
+    <h2 class="section-title">Future Academic Objectives</h2>
+    <p class="body-text">{{careerObjective}}</p>
+  </section>
+  <!-- OBJECTIVE_SECTION_END -->
+
+</div>
+</body>
+</html>
