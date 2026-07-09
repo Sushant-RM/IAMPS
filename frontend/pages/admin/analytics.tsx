@@ -10,6 +10,7 @@ import {
 export default function AnalyticsDashboard() {
     const [trends, setTrends] = useState([]);
     const [collaboration, setCollaboration] = useState<{ nodes: any[], links: any[] }>({ nodes: [], links: [] });
+    const [leastRepresented, setLeastRepresented] = useState<{ name: string, count: number }[]>([]);
     const [loading, setLoading] = useState(true);
     const [selectedPaper, setSelectedPaper] = useState({ abstract: '', title: '', venue: '', type: 'Journal' });
     const [prediction, setPrediction] = useState<any>(null);
@@ -22,12 +23,18 @@ export default function AnalyticsDashboard() {
     const fetchAnalytics = async () => {
         try {
             setLoading(true);
-            const [trendsRes, collabRes] = await Promise.all([
+            const [trendsRes, collabRes, statsRes] = await Promise.all([
                 api.get('/ai/analytics/trends'),
-                api.get('/ai/analytics/collaboration')
+                api.get('/ai/analytics/collaboration'),
+                api.get('/papers/public/stats')
             ]);
             setTrends(trendsRes.data);
             setCollaboration(collabRes.data);
+            // Real signal, not a prediction: departments with the fewest approved
+            // papers, from actual DB counts (papersPerDept is real aggregation,
+            // already used elsewhere on this page).
+            const byCount = [...(statsRes.data.papersPerDept || [])].sort((a: any, b: any) => a.count - b.count);
+            setLeastRepresented(byCount.slice(0, 3));
         } catch {
             // Analytics unavailable
         } finally {
@@ -196,19 +203,24 @@ export default function AnalyticsDashboard() {
                         )}
                     </div>
 
-                    {/* Research Gaps / Insights */}
+                    {/* Least-Represented Departments — real counts, not an AI insight */}
                     <div className="bg-white dark:bg-gray-800 p-8 rounded-3xl shadow-sm border border-gray-100 dark:border-gray-700 flex flex-col justify-center">
                         <div className="text-center">
                             <div className="w-16 h-16 bg-purple-100 dark:bg-purple-900 rounded-full flex items-center justify-center mx-auto mb-6 text-2xl">💡</div>
-                            <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">Research Gaps</h3>
-                            <p className="text-gray-500 dark:text-gray-400 mb-6 font-medium">Under-explored territories identified by AI</p>
-                            <div className="space-y-3">
-                                {['Deep Learning in Civil Engineering', 'Sustainable Logistics', 'Quantum Cryptography in E-commerce'].map((gap, i) => (
-                                    <div key={i} className="px-4 py-2 bg-purple-50 dark:bg-purple-900/40 text-purple-700 dark:text-purple-300 text-sm rounded-xl font-bold">
-                                        {gap}
-                                    </div>
-                                ))}
-                            </div>
+                            <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">Least-Represented Departments</h3>
+                            <p className="text-gray-500 dark:text-gray-400 mb-6 font-medium">Departments with the fewest approved papers — a simple count, not an AI analysis</p>
+                            {leastRepresented.length === 0 ? (
+                                <p className="text-gray-400 dark:text-gray-500 text-sm font-medium">No approved papers yet.</p>
+                            ) : (
+                                <div className="space-y-3">
+                                    {leastRepresented.map((dept, i) => (
+                                        <div key={i} className="px-4 py-2 bg-purple-50 dark:bg-purple-900/40 text-purple-700 dark:text-purple-300 text-sm rounded-xl font-bold flex justify-between">
+                                            <span>{dept.name}</span>
+                                            <span>{dept.count} paper{dept.count === 1 ? '' : 's'}</span>
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
                         </div>
                     </div>
 
