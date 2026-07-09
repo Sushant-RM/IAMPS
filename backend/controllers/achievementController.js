@@ -1,6 +1,7 @@
 const Achievement = require('../models/Achievement');
 const User = require('../models/User');
 const Department = require('../models/Department');
+const Notification = require('../models/Notification');
 
 // @desc    Create a new achievement
 // @route   POST /api/achievements
@@ -259,6 +260,16 @@ exports.approveAchievement = async (req, res) => {
     achievement.updatedAt = Date.now();
     await achievement.save();
 
+    if (achievement.userId) {
+      await Notification.create({
+        userId: achievement.userId,
+        type: 'achievement_status',
+        title: 'Achievement Approved',
+        body: `Your achievement "${achievement.achievementTitle}" has been approved.`,
+        read: false,
+      });
+    }
+
     const populated = await Achievement.findById(achievement._id).populate('approvedBy', 'fullName email');
 
     res.status(200).json({
@@ -322,6 +333,16 @@ exports.rejectAchievement = async (req, res) => {
     achievement.rejectionReason = rejectionReason;
     achievement.updatedAt = Date.now();
     await achievement.save();
+
+    if (achievement.userId) {
+      await Notification.create({
+        userId: achievement.userId,
+        type: 'achievement_status',
+        title: 'Achievement Rejected',
+        body: `Your achievement "${achievement.achievementTitle}" was rejected. Reason: ${rejectionReason}`,
+        read: false,
+      });
+    }
 
     res.status(200).json({
       success: true,

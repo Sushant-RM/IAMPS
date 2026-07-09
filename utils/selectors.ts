@@ -4,8 +4,8 @@
  */
 export const SELECTORS = {
   login: {
-    emailInput: '#email',
-    passwordInput: '#password',
+    emailInput: '#field-email',
+    passwordInput: '#field-password',
     submitButton: 'button[type="submit"]',
     errorAlert: '.bg-red-50 p, .bg-red-100', // Matches current alert styling
     navbarAvatar: '#user-menu-button',

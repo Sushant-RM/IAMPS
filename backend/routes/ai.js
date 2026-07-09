@@ -369,19 +369,32 @@ router.get('/analytics/trends', async (req, res) => {
 // GET /analytics/collaboration - Matrix of department collaborations
 router.get('/analytics/collaboration', async (req, res) => {
     try {
-        // Mock logic: Count papers where multiple departments or external authors exist
-        // For demo: Just return counts of papers per department relative to each other
         const depts = await Department.find({});
-        const papers = await Paper.find({ status: 'approved' }).populate('departmentId');
+        const papers = await Paper.find({ status: { $in: ['approved', 'published'] } }).populate('departmentId');
 
         const nodes = depts.map(d => ({ id: d.name, group: 1 }));
         const links = [];
 
-        // Simple link generation for visual demo
-        // TODO: Replace with real DB aggregation (use actual co-authors array length from Paper documents)
+        // Real signal: authors shared between a department pair's approved papers,
+        // normalized against the combined pool of distinct authors for that pair.
+        const authorsByDept = new Map(
+            depts.map((d) => [
+                d._id.toString(),
+                new Set(
+                    papers
+                        .filter((p) => p.departmentId && p.departmentId._id.toString() === d._id.toString())
+                        .flatMap((p) => p.authors || [])
+                ),
+            ])
+        );
+
         for (let i = 0; i < depts.length; i++) {
             for (let j = i + 1; j < depts.length; j++) {
-                const strength = 0.75;
+                const authorsA = authorsByDept.get(depts[i]._id.toString());
+                const authorsB = authorsByDept.get(depts[j]._id.toString());
+                const shared = [...authorsA].filter((a) => authorsB.has(a)).length;
+                const combined = new Set([...authorsA, ...authorsB]).size;
+                const strength = combined > 0 ? Math.round((shared / combined) * 100) / 100 : 0;
                 links.push({ source: depts[i].name, target: depts[j].name, value: strength });
             }
         }

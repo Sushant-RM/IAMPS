@@ -41,9 +41,10 @@ export function computePortfolioScores(input: PortfolioScoreInput): PortfolioSco
   if ((input.achievements?.length ?? 0) > 0) atsScore += 10;
   atsScore = Math.min(100, atsScore);
 
-  const careerReadiness =
+  const rawCareerReadiness =
     input.careerAnalytics?.placement_readiness?.overall_score ??
-    Math.min(100, Math.round(completeness * 0.6 + atsScore * 0.4));
+    (completeness * 0.6 + atsScore * 0.4);
+  const careerReadiness = Math.max(0, Math.min(100, Math.round(rawCareerReadiness)));
 
   const skillGaps = Math.max(0, 5 - (input.skills?.length ?? 0));
   const portfolioScore = Math.round(completeness * 0.35 + atsScore * 0.35 + careerReadiness * 0.3);
