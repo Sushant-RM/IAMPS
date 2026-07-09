@@ -78,6 +78,13 @@ export default function AnalyticsDashboard() {
                     <div className="lg:col-span-2 bg-white dark:bg-gray-800 p-8 rounded-3xl shadow-sm border border-gray-100 dark:border-gray-700">
                         <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-8">Publication Volume Over Time</h3>
                         <div className="h-80 w-full">
+                          {trends.length === 0 ? (
+                            <div className="h-full w-full flex items-center justify-center text-center px-8">
+                                <p className="text-gray-400 dark:text-gray-500 text-sm font-medium">
+                                    No approved papers yet — this chart will populate once papers are approved.
+                                </p>
+                            </div>
+                          ) : (
                             <ResponsiveContainer width="100%" height="100%">
                                 <AreaChart data={trends}>
                                     <defs>
@@ -96,6 +103,7 @@ export default function AnalyticsDashboard() {
                                     <Area type="monotone" dataKey="Conference" stroke="#10B981" strokeWidth={3} fillOpacity={0} />
                                 </AreaChart>
                             </ResponsiveContainer>
+                          )}
                         </div>
                     </div>
 
@@ -170,9 +178,15 @@ export default function AnalyticsDashboard() {
                             <div className="mt-10 p-6 bg-blue-50 dark:bg-blue-900/30 rounded-2xl border border-blue-100 dark:border-blue-800 animate-in fade-in slide-in-from-bottom-4">
                                 <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
                                     <div>
-                                        <p className="text-blue-600 dark:text-blue-400 text-xs font-black uppercase tracking-widest">Prediction Result</p>
+                                        <div className="flex items-center gap-2">
+                                            <p className="text-blue-600 dark:text-blue-400 text-xs font-black uppercase tracking-widest">Prediction Result</p>
+                                            <span className="px-2 py-0.5 rounded-full bg-amber-100 text-amber-700 text-[10px] font-black uppercase tracking-wider">Heuristic Estimate</span>
+                                        </div>
                                         <h4 className="text-2xl font-black text-blue-900 dark:text-blue-100 mt-1">Impact Score: {prediction.score}/100</h4>
                                         <p className="text-blue-700 dark:text-blue-300 mt-2 max-w-xl">{prediction.reasoning}</p>
+                                        {prediction.disclaimer && (
+                                            <p className="text-blue-500/80 dark:text-blue-400/70 mt-2 max-w-xl text-xs italic">{prediction.disclaimer}</p>
+                                        )}
                                     </div>
                                     <div className={`px-6 py-3 rounded-full font-black text-sm uppercase ${prediction.level === 'High' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'}`}>
                                         {prediction.level} Potential

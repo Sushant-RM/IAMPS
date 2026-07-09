@@ -348,17 +348,9 @@ router.get('/analytics/trends', async (req, res) => {
 
         const result = Object.values(formatted);
 
-        // Return demo data if database has no approved papers yet
-        if (result.length === 0) {
-            return res.json([
-                { name: '2021', Journal: 3, Conference: 5, Thesis: 1 },
-                { name: '2022', Journal: 6, Conference: 8, Thesis: 2 },
-                { name: '2023', Journal: 10, Conference: 12, Thesis: 4 },
-                { name: '2024', Journal: 8, Conference: 15, Thesis: 3 },
-                { name: '2025', Journal: 5, Conference: 7, Thesis: 1 },
-            ]);
-        }
-
+        // Real data only — an empty array (no approved papers yet) is reported honestly
+        // rather than backfilled with a canned dataset. The frontend renders an
+        // explicit "no data yet" state for this case.
         res.json(result);
     } catch (err) {
         res.status(500).json({ message: 'Error fetching trends' });
@@ -405,24 +397,28 @@ router.get('/analytics/collaboration', async (req, res) => {
     }
 });
 
-// POST /predict-impact - Predict citation/impact score
+// POST /predict-impact - Heuristic citation/impact estimate (NOT a trained model — see `methodology`/`disclaimer`)
 router.post('/predict-impact', async (req, res) => {
     try {
         const { abstract, venue, type } = req.body;
-        // AI Logic Simulation
+        // Rule-based heuristic, not a citation/impact ML model. There is no historical
+        // citation dataset in this system to train or evaluate against, so this is
+        // deliberately labeled as an estimate rather than presented as a prediction.
         let score = 50; // Baseline
         if (venue && (venue.toLowerCase().includes('ieee') || venue.toLowerCase().includes('acm'))) score += 30;
         if (type === 'Journal') score += 15;
         if (abstract && abstract.length > 500) score += 5;
 
-        // Deterministic noise instead of random
+        // Deterministic adjustment (not randomness) so repeat calls with the same input are stable
         const noise = (abstract ? abstract.length % 10 : 5) - 5;
         score = Math.min(100, Math.max(0, score + noise));
 
         res.json({
             score: Math.round(score),
             level: score > 80 ? 'High' : score > 50 ? 'Moderate' : 'Developing',
-            reasoning: "Based on publication venue prestige and detail level of abstract analysis."
+            reasoning: "Based on publication venue prestige and detail level of abstract analysis.",
+            methodology: 'heuristic',
+            disclaimer: 'Estimated from venue/type/length heuristics, not a trained citation-impact model.'
         });
     } catch (err) {
         res.status(500).json({ message: 'Error predicting impact' });

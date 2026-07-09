@@ -55,13 +55,6 @@ export default function Register() {
         ...departments.map((d) => ({ value: d._id, label: d.name })),
     ];
 
-    const roleOptions = [
-        { value: 'student', label: 'Student' },
-        { value: 'faculty', label: 'Faculty' },
-        { value: 'alumni', label: 'Alumni' },
-        { value: 'admin', label: 'Admin' },
-    ];
-
     return (
         <FormCard title="Create Account" subtitle="Join the research community">
             {serverError && <FormAlert>{serverError}</FormAlert>}
@@ -102,27 +95,17 @@ export default function Register() {
                     required
                 />
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <FormField
-                        label="Role"
-                        name="role"
-                        type="select"
-                        value={values.role}
-                        onChange={handleChange}
-                        options={roleOptions}
-                    />
-                    <FormField
-                        label="Department"
-                        name="departmentId"
-                        type="select"
-                        value={values.departmentId}
-                        onChange={handleChange}
-                        onBlur={() => handleBlur('departmentId')}
-                        error={errors.departmentId}
-                        options={deptOptions}
-                        required
-                    />
-                </div>
+                <FormField
+                    label="Department"
+                    name="departmentId"
+                    type="select"
+                    value={values.departmentId}
+                    onChange={handleChange}
+                    onBlur={() => handleBlur('departmentId')}
+                    error={errors.departmentId}
+                    options={deptOptions}
+                    required
+                />
 
                 <SubmitButton loading={loading} loadingText="Creating account...">
                     Create Account

@@ -38,15 +38,6 @@ router.post('/analyze', authMiddleware, upload.single('file'), async (req, res) 
             fullText = "";
         }
 
-        // MOCK CORPUS for demo purposes (if DB is empty or matches are low)
-        const mockCorpus = [
-            "machine learning is a field of inquiry devoted to understanding and building methods that 'learn'",
-            "deep learning is part of a broader family of machine learning methods based on artificial neural networks",
-            "natural language processing is a subfield of linguistics, computer science, and artificial intelligence",
-            "the transformer is a deep learning model that adopts the mechanism of self-attention, differentially weighting the significance of each part of the input data",
-            "plagiarism is presenting someone else's work or ideas as your own, with or without their consent"
-        ];
-
         let matchedPaper = null;
         let highestMatch = 0;
 
@@ -79,38 +70,14 @@ router.post('/analyze', authMiddleware, upload.single('file'), async (req, res) 
             }
         }
 
-        // 4. Check against Mock Corpus (Safety Net for Demo)
-        if (highestMatch < 0.05) { // If < 5% match in DB, check corpus to simulate "internet check"
-            for (const text of mockCorpus) {
-                const corpusWords = new Set(text.split(/\s+/));
-                const intersection = new Set([...inputWords].filter(x => corpusWords.has(x)));
-                if (intersection.size >= 2) { // Arbitrary low threshold for demo
-                    highestMatch = Math.max(highestMatch, 0.12); // Give at least 12% if *any* vague match
-                }
-            }
-            // Random noise for realism if still 0 (User requested 5-35 range)
-            if (highestMatch === 0) {
-                // Deterministic baseline: use filename length as stable seed
-                const seed = req.file ? (req.file.size % 100) / 1000 : 0.07;
-                highestMatch = 0.05 + seed; // 5% to 15% stable baseline
-            }
-        }
-
-
-        // Logic merged above
-
-        // Calculate Scores
+        // Real score only: word-overlap similarity against actual approved papers in the DB.
+        // No fabricated corpus or synthetic baseline — an empty DB or no overlap honestly
+        // reports a low/zero score rather than a padded-looking number.
         const internalScore = Math.round(highestMatch * 100);
 
-        // AI Check (Mocked for speed if no key, or real)
-        let aiScore = 0;
-        let aiAnalysis = "AI check executed.";
-
-        const finalScore = Math.max(internalScore, aiScore);
-
         res.json({
-            score: finalScore,
-            report: `Internal Match: ${internalScore}% (vs ${matchedPaper ? matchedPaper.title : 'None'}). AI Analysis: ${aiAnalysis}`,
+            score: internalScore,
+            report: `Internal Match: ${internalScore}% (vs ${matchedPaper ? matchedPaper.title : 'None'}). Compares only against approved papers already in this system — not an internet-wide or AI-based check.`,
             textSnippet: fullText.substring(0, 500)
         });
 
